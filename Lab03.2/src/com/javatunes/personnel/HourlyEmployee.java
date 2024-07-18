@@ -29,8 +29,10 @@ public class HourlyEmployee extends Employee {
     }
 
     @Override
-    public void pay() {
-        System.out.println(getName() + " is paid hourly " + (getRate() * getHours()));
+    public double pay() {
+        double payment = getRate() * getHours();
+        System.out.println(getName() + " is paid hourly " + payment);
+        return payment;
     }
 
     @Override  // interface TaxPayer
@@ -69,8 +71,8 @@ public class HourlyEmployee extends Employee {
         if (obj instanceof HourlyEmployee) {
             HourlyEmployee other = (HourlyEmployee) obj;
             result = super.equals(obj) &&
-                     Objects.equals(this.getRate(), other.getRate()) &&
-                     Objects.equals(this.getHours(), other.getHours());
+                    Objects.equals(this.getRate(), other.getRate()) &&
+                    Objects.equals(this.getHours(), other.getHours());
         }
         return result;
     }
