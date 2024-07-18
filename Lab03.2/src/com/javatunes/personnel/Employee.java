@@ -66,7 +66,7 @@ public abstract class Employee implements TaxPayer, NamedEntity {
         boolean result = false;
         if (obj instanceof Employee) {
             Employee other = (Employee) obj;
-            result = Objects.equals(this.getName(), other.getName()) &&
+            result = super.equals(obj) &&
                      Objects.equals(this.getHireDate(), other.getHireDate());
         }
         return result;
