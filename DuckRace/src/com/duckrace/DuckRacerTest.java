@@ -4,7 +4,7 @@ import java.util.Collection;
 
 class DuckRacerTest {
     public static void main(String[] args) {
-        DuckRacer racer = new DuckRacer(1, "Nova");
+        DuckRacer racer = new DuckRacer(8, "Kea");
 
         System.out.println(racer);
 
