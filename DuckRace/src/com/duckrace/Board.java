@@ -8,11 +8,11 @@ import java.util.*;
 /*
  * This is a lookup table of ids to student names.
  * When a duck wins for the first time, we need to find out who that is.
- * This lookup table could be hardcoded with the data, or we could read the data 
+ * This lookup table could be hardcoded with the data, or we could read the data
  * in from a file, so that no code changes would need to be made for each cohort.
  *
  * Map<Integer,String> studentIdMap;
- * 
+ *
  * Integer    String
  * =======    ======
  *    1       John
@@ -21,7 +21,7 @@ import java.util.*;
  *    4       Armando
  *    5       Sheila
  *    6       Tess
- * 
+ *
  *
  * We also need a data structure to hold the results of all winners.
  * This data structure should facilitate easy lookup, retrieval, and storage.
@@ -38,9 +38,9 @@ import java.util.*;
  *   17       17    Dom        1    DEBIT_CARD
  */
 
-class Board {
-    private final Map<Integer,String> studentIdMap = loadStudentIdMao();
-    private final Map<Integer,DuckRacer> racerMap  = new TreeMap<>();
+public class Board {
+    private final Map<Integer, String> studentIdMap = loadStudentIdMao();
+    private final Map<Integer, DuckRacer> racerMap = new TreeMap<>();
 
     /*
      * Updates the board by making DuckRacer win().
@@ -54,27 +54,31 @@ class Board {
         DuckRacer racer = null;
 
         if (racerMap.containsKey(id)) {
-             racer = racerMap.get(id);
+            racer = racerMap.get(id);
 
-           // get DuckRacer at that id and call to win().
+            // get DuckRacer at that id and call to win().
 
-        }
-        else {
-            // get() DuckRacer that has that id, get() name associated with id from studentMapId
-            // put() DuckRacer in the map *^DONT FORGET THIS STEP**
-            // call win() on them
-             racer = new DuckRacer(id, studentIdMap.get(id));
+        } else {
+            racer = new DuckRacer(id, studentIdMap.get(id));
             racerMap.put(id, racer);
-            racer.win(reward);
         }
         racer.win(reward);
     }
-        // print title and column headings
-    public void show () {
+
+    // print title and column headings
+    public void show() {
         Collection<DuckRacer> racers = racerMap.values();
 
+        String header = """
+                 Duck Race Results
+                 =================
+                 
+                 id    name     wins   rewards
+                 --    ----     ----   -------""";
+        System.out.println(header);
+
         for (DuckRacer racer : racers) {
-            System.out.printf("%s %s %s %s\n",
+            System.out.printf("%s     %s   %s      %s\n",
                     racer.getId(), racer.getName(), racer.getWins(), racer.getRewards());
         }
     }
@@ -106,8 +110,7 @@ class Board {
                 String name = tokens[1];
                 map.put(id, name);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

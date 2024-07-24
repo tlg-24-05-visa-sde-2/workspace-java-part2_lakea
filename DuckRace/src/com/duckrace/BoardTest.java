@@ -14,7 +14,7 @@ class BoardTest {
         board.update(1, Reward.DEBIT_CARD);
         board.update(9, Reward.DEBIT_CARD);
 
-        board.dumpRacerMap();
+        board.show();
 
     }
 
