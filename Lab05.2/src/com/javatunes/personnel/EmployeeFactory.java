@@ -25,6 +25,27 @@ public class EmployeeFactory {
         // return value
         Employee emp = null;
 
+        String type = inputMap.get("type");
+
+        if (!"SE".equals(type) && !"HE".equals(type)) {
+            throw new IllegalArgumentException("Invalid type: " + type + ". Must be HE or SE");
+        }
+
+
+        // read common properties
+        String name = inputMap.get("name");
+        Date hireDate = Date.valueOf(inputMap.get("hireDate"));
+
+
+        if ("SE".equals(type)) {
+            Double salary = Double.valueOf(inputMap.get("salary"));
+            emp = new SalariedEmployee(name, hireDate, salary);
+        }
+        else {
+            Double rate = Double.valueOf(inputMap.get("rate"));
+            Double hours = Double.valueOf(inputMap.get("hours"));
+            emp = new HourlyEmployee(name, hireDate, rate, hours);
+        }
         return emp;
     }
 }

@@ -1,6 +1,8 @@
 package com.javatunes.personnel;
 
 import static org.junit.Assert.*;
+
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;
@@ -51,16 +53,44 @@ public class EmployeeFactoryTest {
      * assertEquals(SalariedEmployee.class, emp.getClass())
      */
     @Test
-    public void testCreateEmployeeSalaried() {
-        // TODO
+    public void createEmployee_shouldReturnSalariedEmployee_whenTypeSE() {
+        Employee emp = EmployeeFactory.createEmployee(seMap);
+
+        // check that emp is exactly type SalariedEmployee
+        assertEquals(SalariedEmployee.class, emp.getClass());
+
+        verifyNameAndHireDate(emp);
+
+        // downcast emp to more specific reference type SalariedEmployee, so we can call SalariedEmployee specific methods
+
+        SalariedEmployee semp = (SalariedEmployee) emp;
+        assertEquals(50_000.0, semp.getSalary(), .001);
+    }
+
+    private static void verifyNameAndHireDate(Employee emp) {
+        // verify all the properties are set from map
+        assertEquals("Jackie", emp.getName());
+        assertEquals(Date.valueOf("1990-08-24"), emp.getHireDate());
     }
 
     /**
      * TASK: verify that passing heMap into your factory returns a HourlyEmployee, with all properties set.
      */
     @Test
-    public void testCreateEmployeeHourly() {
-        // TODO
+    public void createEmployee_shouldReturnHourlyEmployee_whenTypeHE() {
+        Employee emp = EmployeeFactory.createEmployee(heMap);
+
+        // check that emp is exactly type SalariedEmployee
+        assertEquals(HourlyEmployee.class, emp.getClass());
+
+        verifyNameAndHireDate(emp);
+
+        // downcast emp to more specific reference type SalariedEmployee, so we can call SalariedEmployee specific methods
+        HourlyEmployee hemp = (HourlyEmployee) emp;
+        assertEquals(50.0, hemp.getRate(), .001);
+        assertEquals(40.0, hemp.getHours(), .001);
+
+
     }
 
     /**
@@ -68,7 +98,10 @@ public class EmployeeFactoryTest {
      * The only valid values for "type" are "HE" or "SE".
      */
     @Test
-    public void testCreateEmployeeInvalidTypeThrowsIllegalArgumentException() {
-        // TODO
+    public void createEmployee_invalidType_shouldThrowIllegalArgumentException() {
+        seMap.put("type", "INVALID-TYPE");
+
+        EmployeeFactory.createEmployee(seMap);
+
     }
 }
