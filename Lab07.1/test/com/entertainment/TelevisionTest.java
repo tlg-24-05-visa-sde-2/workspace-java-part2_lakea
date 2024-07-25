@@ -9,10 +9,13 @@
 package com.entertainment;
 
 import static org.junit.Assert.*;
+
+import jdk.jfr.Timespan;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.rules.Timeout;
 
 public class TelevisionTest {
 
@@ -20,9 +23,10 @@ public class TelevisionTest {
      * TODO: use a JUnit timeout mechanism to verify that this test completes within 2.5 seconds.
      * It should be marked as a failed test if it takes longer than that.
      */
-    @Test
+    @Test(timeout = 2500)
     public void connectToNetwork_completesWithinTimeout() {
         Television tv = new Television();
+        Timeout timeout = Timeout.millis(2500);
         tv.connectToNetwork();
     }
 
