@@ -7,6 +7,16 @@ public class TaxCalculatorFactory {
     }
 
     public static TaxCalculator createTaxCalculator(Location location) {
+        // Java Part 2 sessions manuel p. 122 for more details
+        TaxCalculator calc = switch (location) {
+            case ONLINE -> new OnlineTax();
+            case USA -> new USATax();
+            case EUROPE -> new EuropeTax();
+        };
+
+        return calc;
+
+        /*
         TaxCalculator calc = null;
 
         switch (location) {
@@ -22,6 +32,7 @@ public class TaxCalculatorFactory {
         }
 
         return calc;
+         */
 
     }
 }
