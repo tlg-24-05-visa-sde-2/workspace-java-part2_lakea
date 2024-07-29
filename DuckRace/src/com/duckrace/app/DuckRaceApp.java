@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class DuckRaceApp {
     private final Scanner scanner = new Scanner(System.in);
-    private final Board board = new Board();
+    private final Board board = Board.getInstance();
 
     public void execute() {
         welcome();
@@ -16,6 +16,9 @@ public class DuckRaceApp {
         Reward reward = promprForReward();
         updateReward(id, reward);
         showBoard();
+    }
+    private void updateBoard(int id, Reward reward) {
+        board.update(id, reward);
     }
 
     private Reward promprForReward() {
@@ -53,6 +56,7 @@ public class DuckRaceApp {
     }
 
     private void updateReward(int id, Reward reward) {
+        board.update(id, reward);
     }
 
     private void showBoard() {
@@ -64,7 +68,7 @@ public class DuckRaceApp {
         System.out.println("- - - - - - -    - -     - - -   - - - -     - - - -");
         System.out.println("W E L C O M E    T O     T H E   D U C K     R A C E");
         System.out.println("- - - - - - -    - -     - - -   - - - -     - - - -");
-        System.out.println();
+        System.out.println("\n");
 
     }
 }

@@ -1,9 +1,13 @@
 package com.duckrace;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /*
  * This is a lookup table of ids to student names.
@@ -38,9 +42,42 @@ import java.util.*;
  *   17       17    Dom        1    DEBIT_CARD
  */
 
-public class Board {
+public class Board implements Serializable {
+    private static final String DATA_FILE_PATH = "data/board.dat";
+    private static final String CONF_FILE_PATH = "conf/student-ids.csv";
+
+    /*
+     * If data/board.dat exists the application has been run before =, at least once.
+     * Therefore, recreate the board object from that binary final.
+     *
+     * If the file is not there, this is the very first time the app has been ran.
+     * Therefore, create and return new board.
+     */
+    public static Board getInstance() {
+
+        Board board = null;
+
+        if (Files.exists(Path.of(DATA_FILE_PATH))) {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(DATA_FILE_PATH))) {
+                board = (Board) in.readObject();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            board = new Board();
+        }
+        return board;
+    }
+
     private final Map<Integer, String> studentIdMap = loadStudentIdMao();
     private final Map<Integer, DuckRacer> racerMap = new TreeMap<>();
+
+    // private ctor - prevent instantiation outside = only getInstance() cn do this
+
+    private Board() {
+
+    }
 
     /*
      * Updates the board by making DuckRacer win().
@@ -63,6 +100,16 @@ public class Board {
             racerMap.put(id, racer);
         }
         racer.win(reward);
+
+        save();
+    }
+
+    private void save() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE_PATH))) {
+            out.writeObject(this);      // write "me: binary file ("I" am a board object)
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // print title and column headings
@@ -70,52 +117,45 @@ public class Board {
         Collection<DuckRacer> racers = racerMap.values();
 
         String header = """
-                 Duck Race Results
-                 =================
-                 
-                 id    name     wins   rewards
-                 --    ----     ----   -------""";
-        System.out.println(header);
+                Duck Race Results
+                =================
+                
+                id    name     wins   rewards
+                --    ----     ----   -------
+                """;
 
-        for (DuckRacer racer : racers) {
-            System.out.printf("%s     %s   %s      %s\n",
-                    racer.getId(), racer.getName(), racer.getWins(), racer.getRewards());
+        StringBuilder board = new StringBuilder(header);
+
+        for (DuckRacer racer : racerMap.values()) {
+            String rewardsString = racer.getRewards().toString();
+            String rewards = rewardsString.substring(1, rewardsString.length() - 1);
+
+            String row = String.format("%2d    %-9s %4d    %s\n",
+                    racer.getId(), racer.getName(), racer.getWins(), rewards);
+            board.append(row);
         }
+        System.out.println(board);
     }
 
-    // FOR TESTING ONLY
-    void dumpRacerMap() {
-        Collection<DuckRacer> racers = racerMap.values();
-
-        for (DuckRacer racer : racers) {
-            System.out.println(racer);
-        }
-    }
-
-    // FOR TESTING ONLY
-    void dumpStudentIdMap() {
-        System.out.println(studentIdMap);
-    }
 
     private Map<Integer, String> loadStudentIdMao() {
         Map<Integer, String> map = new HashMap<>();
 
         // read all lines from CSV file, and process each one into an integer and a string
         try {
-            List<String> lines = Files.readAllLines(Path.of("conf/student-ids.csv"));
-            // for each line, "split the string into "token" -> 8 Kea
+            List<String> lines = Files.readAllLines(Path.of(CONF_FILE_PATH));
+
+            // for each line, "split" the string into "tokens"
             for (String line : lines) {
-                String[] tokens = line.split(",");  //"8" and "Kea"
+                String[] tokens = line.split(",");  // "1" and "Bullen"
                 Integer id = Integer.valueOf(tokens[0]);
                 String name = tokens[1];
                 map.put(id, name);
             }
         } catch (IOException e) {
             e.printStackTrace();
+
         }
-
-
         return map;
     }
-
 }

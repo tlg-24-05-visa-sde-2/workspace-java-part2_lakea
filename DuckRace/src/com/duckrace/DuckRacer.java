@@ -1,9 +1,11 @@
 package com.duckrace;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
-class DuckRacer {
+class DuckRacer implements Serializable {
 
     //fields or instance variables
 
@@ -37,13 +39,12 @@ class DuckRacer {
     }
 
     public Collection<Reward> getRewards() {
-        return rewards;
+        return Collections.unmodifiableCollection(rewards);
     }
 
     @Override
     public String toString() {
-        return String.format("%s: id=%s, name=%s, wins=%s, Rewards=%s",
-                getClass().getSimpleName(), getId(), getName(), getWins(), getRewards());  // toString() automatically called
-
+        return String.format("%s: id=%s, name=%s, wins=%s, rewards=%s",
+                getClass().getSimpleName(), getId(), getName(), getWins(), getRewards());
     }
-    }
+}

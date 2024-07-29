@@ -1,4 +1,5 @@
-package com.duckrace.client;
+package com
+        .duckrace.client;
 
 import com.duckrace.app.DuckRaceApp;
 
